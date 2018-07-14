@@ -144,27 +144,81 @@ void setup() {
 
 void loop() {
   long duration, distance;
+  long range_f;
+  long range_l;
+  long range_r;
+
+  //Front USonic
+  digitalWrite(utf, LOW);  // Added this line
+  delayMicroseconds(2); // Added this line
+  digitalWrite(utf, HIGH);
+  delayMicroseconds(2); // Added this line
+  range_f = pulseIn(uef, HIGH);
+
+  //Left USonic
+  digitalWrite(utl, LOW);  // Added this line
+  delayMicroseconds(2); // Added this line
+  digitalWrite(utl, HIGH);
+  delayMicroseconds(2); // Added this line
+  range_l = pulseIn(uel, HIGH);
+
+  //Right USonic
   digitalWrite(utr, LOW);  // Added this line
   delayMicroseconds(2); // Added this line
   digitalWrite(utr, HIGH);
-  delayMicroseconds(10); // Added this line
-  digitalWrite(utr, LOW);
-  duration = pulseIn(uer, HIGH);
+  delayMicroseconds(2); // Added this line
+  range_r = pulseIn(uer, HIGH);
+
+  //Print
+  Serial.print("rangeF = ");
+  Serial.println(range_f);
+  Serial.print("rangeL = ");
+  Serial.println(range_l);
+  Serial.print("rangeR = ");
+  Serial.println(range_r);
+  Serial.println();
+  Serial.println();
+  
+
+
+  if (range_f < 300){
+    digitalWrite(mlia,HIGH);
+    digitalWrite(mlib,HIGH);
+  } else {
+      
+  }
+
+  if (range_l < 1000){
+    digitalWrite(mlia,LOW);
+    digitalWrite(mlib,HIGH);
+  } else {
+      
+  }
+
+  if (range_r < 1000){
+    digitalWrite(mlia,HIGH);
+    digitalWrite(mlib,LOW);
+  } else {
+      
+  }
+  /*
   distance = (duration/2) / 29.1;
-  if (distance < 4) {  // This is where the LED On/Off happens
+  if (distance < 10) {  // This is where the LED On/Off happens
     digitalWrite(led,HIGH); // When the Red condition is met, the Green LED should turn off
     digitalWrite(mlia,HIGH);
   }
   else {
     digitalWrite(led,LOW);
+    digitalWrite(mlia,LOW);
   }
-  if (distance >= 200 || distance <= 0){
+  if (distance >= 20000 || distance <= 0){
     Serial.println("Out of range");
   }
   else {
     Serial.print(distance);
     Serial.println(" cm");
   }
-  delay(10);
+  */
+  delay(100);
 }
 
