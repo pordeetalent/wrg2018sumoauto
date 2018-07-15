@@ -1,16 +1,16 @@
-#define trigpinF 0
-#define echopinF 1
-#define trigpinL 2
-#define echopinL 3
-#define trigpinR 4
-#define echopinR 5
+#define trigpinF 0 //trig ของ ultrasonic front
+#define echopinF 1 //echo ของ ultrasonic front
+#define trigpinL 2 //trig ของ ultrasonic left
+#define echopinL 3 //echo ของ ultrasonic left
+#define trigpinR 4 //trig ของ ultrasonic right
+#define echopinR 5 //echo ของ ultrasonic right
 
-int aA1 = 9;
-int bB1 = 10;
-int aA2 = 12;
-int bB2 = 14;
-int en1 = 8;
-int en2 = 11;
+int aA1 = 9; //มอเตอร์ left ขา inA
+int bB1 = 10; //มอเตอร์ left ขา inB
+int aA2 = 12; //มอเตอร์ Right ขา inA
+int bB2 = 14; //มอเตอร์ Right ขา inB
+int en1 = 8; //มอเตอร์ Left ขา pwm
+int en2 = 11; //มอเตอร์ Right ขา pwm
 
 void setup(){
   pinMode(aA1, OUTPUT);
@@ -36,7 +36,8 @@ void loop(){
   durationF = pulseIn(echopinF, HIGH);
   distanceF = (durationF / 2) / 29.1;
 
-  if (distanceF >= 40){
+  
+  if (distanceF >= 40){ // ถ้า ultrasonic front มีค่า 40 ขึ้นไป ให้มอเตอร์ไม่หมุน
     digitalWrite(aA1, LOW);
     digitalWrite(bB1, LOW);
     digitalWrite(aA2, LOW);
@@ -45,8 +46,8 @@ void loop(){
     analogWrite(en2,0);
     delay(500);
 
-  } else {
-    if (distanceF >= 25){
+  } else { 
+    if (distanceF >= 25){ //แต่ถ้า ultrasonic front มีค่า 25 ขึ้นไป ให้มอเตอร์ A หมุน
       digitalWrite(aA1, HIGH);
       digitalWrite(bB1, LOW);
       digitalWrite(aA2, HIGH);
@@ -54,7 +55,7 @@ void loop(){
       analogWrite(en1,255);
       analogWrite(en2,255);
       delay(400); 
-    } else {
+    } else { //แต่ถ้า ultrasonic front ไม่มากกว่า 40 และไม่มากกว่า 25 ให้มอเตอร์ B หมุน
       digitalWrite(aA1, LOW);
       digitalWrite(bB1, HIGH);
       digitalWrite(aA2, LOW);
