@@ -29,6 +29,10 @@ void setup(){
 
 void loop(){
   
+  //#####################################
+  //##### การจัดการ Ultrasonic front #####
+  //#####################################
+  
   int durationF, distanceF;
   digitalWrite(trigpinF, HIGH);
   delayMicroseconds(1000);
@@ -56,6 +60,90 @@ void loop(){
       analogWrite(en2,255);
       delay(400); 
     } else { //แต่ถ้า ultrasonic front ไม่มากกว่า 40 และไม่มากกว่า 25 ให้มอเตอร์ B หมุน
+      digitalWrite(aA1, LOW);
+      digitalWrite(bB1, HIGH);
+      digitalWrite(aA2, LOW);
+      digitalWrite(bB2, HIGH);
+      analogWrite(en1,255);
+      analogWrite(en2,255);
+      delay(400);
+
+    }
+
+  }
+
+  //####################################
+  //##### การจัดการ Ultrasonic left #####
+  //####################################
+  
+  int durationL, distanceL;
+  digitalWrite(trigpinL, HIGH);
+  delayMicroseconds(1000);
+  digitalWrite(trigpinL, LOW);
+  durationL = pulseIn(echopinL, HIGH);
+  distanceL = (durationL / 2) / 29.1;
+
+  
+  if (distanceL >= 40){ // ถ้า ultrasonic left มีค่า 40 ขึ้นไป ให้มอเตอร์ไม่หมุน
+    digitalWrite(aA1, LOW);
+    digitalWrite(bB1, LOW);
+    digitalWrite(aA2, LOW);
+    digitalWrite(bB2, LOW);
+    analogWrite(en1,0);
+    analogWrite(en2,0);
+    delay(500);
+
+  } else { 
+    if (distanceL >= 25){ //แต่ถ้า ultrasonic left มีค่า 25 ขึ้นไป ให้มอเตอร์ A หมุน
+      digitalWrite(aA1, HIGH);
+      digitalWrite(bB1, LOW);
+      digitalWrite(aA2, HIGH);
+      digitalWrite(bB2, LOW);
+      analogWrite(en1,255);
+      analogWrite(en2,255);
+      delay(400); 
+    } else { //แต่ถ้า ultrasonic left ไม่มากกว่า 40 และไม่มากกว่า 25 ให้มอเตอร์ B หมุน
+      digitalWrite(aA1, LOW);
+      digitalWrite(bB1, HIGH);
+      digitalWrite(aA2, LOW);
+      digitalWrite(bB2, HIGH);
+      analogWrite(en1,255);
+      analogWrite(en2,255);
+      delay(400);
+
+    }
+
+  //#####################################
+  //##### การจัดการ Ultrasonic right #####
+  //#####################################
+  
+  int durationR, distanceR;
+  digitalWrite(trigpinR, HIGH);
+  delayMicroseconds(1000);
+  digitalWrite(trigpinR, LOW);
+  durationR = pulseIn(echopinR, HIGH);
+  distanceR = (durationR / 2) / 29.1;
+
+  
+  if (distanceR >= 40){ // ถ้า ultrasonic right มีค่า 40 ขึ้นไป ให้มอเตอร์ไม่หมุน
+    digitalWrite(aA1, LOW);
+    digitalWrite(bB1, LOW);
+    digitalWrite(aA2, LOW);
+    digitalWrite(bB2, LOW);
+    analogWrite(en1,0);
+    analogWrite(en2,0);
+    delay(500);
+
+  } else { 
+    if (distanceR >= 25){ //แต่ถ้า ultrasonic right มีค่า 25 ขึ้นไป ให้มอเตอร์ A หมุน
+      digitalWrite(aA1, HIGH);
+      digitalWrite(bB1, LOW);
+      digitalWrite(aA2, HIGH);
+      digitalWrite(bB2, LOW);
+      analogWrite(en1,255);
+      analogWrite(en2,255);
+      delay(400); 
+    } else { //แต่ถ้า ultrasonic right ไม่มากกว่า 40 และไม่มากกว่า 25 ให้มอเตอร์ B หมุน
       digitalWrite(aA1, LOW);
       digitalWrite(bB1, HIGH);
       digitalWrite(aA2, LOW);
