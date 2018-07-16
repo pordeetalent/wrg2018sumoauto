@@ -1,110 +1,63 @@
-//Author Sirapol Nokyoongthong
-//email pordeetalent@gmail.com
-//2018-07-13
+const trigpinF 0 //trig ของ ultrasonic front
+const echopinF 1 //echo ของ ultrasonic front
+const trigpinL 2 //trig ของ ultrasonic left
+const echopinL 3 //echo ของ ultrasonic left
+const trigpinR 4 //trig ของ ultrasonic right
+const echopinR 5 //echo ของ ultrasonic right
 
-#define utf 0 //Ultrasonic trig front
-#define uef 1 //Ultrasonic echo front
-#define utl 2 //Ultrasonic trig left
-#define uel 3 //Ultrasonic echo leftt
-#define utr 4 //Ultrasonic trig right
-#define uer 5 //Ultrasonic echo right
-#define mlia 9 //Motor left in A
-#define mlib 10 //Motor left in B
-#define mlpw 8 //Motor left PWM
-#define mria 12 //Motor right in A
-#define mrib 14 //Motor right in B
-#define mrpw 11 //Motor right PWM
-#define led 13
+int aA1 = 9; //มอเตอร์ left ขา inA //หมุนมอเตอร์ซ้ายไปด้านหน้า (ค่ามี 0 กับ 1)
+int bB1 = 10; //มอเตอร์ left ขา inB //หมุนมอเตอร์ซ้ายไปด้านหลัง (ค่ามี 0 กับ 1)
+int aA2 = 12; //มอเตอร์ Right ขา inA //หมุนมอเตอร์ขวาไปด้านหน้า (ค่ามี 0 กับ 1)
+int bB2 = 14; //มอเตอร์ Right ขา inB //หมุนมอเตอร์ขวาไปด้านหลัง (ค่ามี 0 กับ 1)
+int en1 = 8; //มอเตอร์ Left ขา pwm //กำหนดความเร็วการหมุนของมอเตอร์ซ้าย (ค่ามี 0 ถึง 255)
+int en2 = 11; //มอเตอร์ Right ขา pwm //กำหนดความเร็วการหมุนของมอเตอร์ขวา (ค่ามี 0 ถึง 255)
 
+int distF ; //ระยะห่างของ ultrasonic front
+int distL ; //ระยะห่างของ ultrasonic left
+int distR ; //ระยะห่างของ ultrasonic right
 
-void setup() {
-  Serial.begin (9600);
-  pinMode(utf, OUTPUT);
-  pinMode(uef, INPUT);
-  pinMode(utl, OUTPUT);
-  pinMode(uel, INPUT);
-  pinMode(utr, OUTPUT);
-  pinMode(uer, INPUT);
-  pinMode(led, OUTPUT);
-  pinMode(mlia, OUTPUT);
-  pinMode(mlib, OUTPUT);
-  pinMode(mlpw, OUTPUT);
-  pinMode(mria, OUTPUT);
-  pinMode(mrib, OUTPUT);
-  pinMode(mrpw, OUTPUT);
+void setup(){
+  pinMode(aA1, OUTPUT);
+  pinMode(bB1, OUTPUT);
+  pinMode(aA2, OUTPUT);
+  pinMode(bB2, OUTPUT);
+  pinMode(en1, OUTPUT);
+  pinMode(en2, OUTPUT);
+  pinMode(trigpinF, OUTPUT);
+  pinMode(echopinF, INPUT);
+  pinMode(trigpinL, OUTPUT);
+  pinMode(echopinL, INPUT);
+  pinMode(trigpinR, OUTPUT);
+  pinMode(echopinR, INPUT);
+  delay (5000); //รอ 5 วินาทีก่อนที่จะทำงาน ตามที่กติกากำหนด
 }
 
-void loop() {
-  long duration, distance;
-  long range_f;
-  long range_l;
-  long range_r;
-
-  //Front USonic
-  digitalWrite(utf, LOW);  // Added this line
-  delayMicroseconds(2); // Added this line
-  digitalWrite(utf, HIGH);
-  delayMicroseconds(2); // Added this line
-  range_f = pulseIn(uef, HIGH);
-
-  //Left USonic
-  digitalWrite(utl, LOW);  // Added this line
-  delayMicroseconds(2); // Added this line
-  digitalWrite(utl, HIGH);
-  delayMicroseconds(2); // Added this line
-  range_l = pulseIn(uel, HIGH);
-
-  //Right USonic
-  digitalWrite(utr, LOW);  // Added this line
-  delayMicroseconds(2); // Added this line
-  digitalWrite(utr, HIGH);
-  delayMicroseconds(2); // Added this line
-  range_r = pulseIn(uer, HIGH);
-
-  //Print
-  Serial.print("rangeF = ");
-  Serial.println(range_f);
-  Serial.print("rangeL = ");
-  Serial.println(range_l);
-  Serial.print("rangeR = ");
-  Serial.println(range_r);
-  Serial.println();
-  Serial.println();
+void loop(){
   
 
-
-  if (range_f < 300){
-    digitalWrite(mlia,HIGH);
-    digitalWrite(mlib,HIGH);
-  } else {
-      
-  }
-
-  if (range_l < 1000){
-    digitalWrite(mlia,LOW);
-    digitalWrite(mlib,HIGH);
-  } else {
-      
-  }
-
-  if (range_r < 1000){
-    digitalWrite(mlia,HIGH);
-    digitalWrite(mlib,LOW);
-  } else {
-      
-  }
-
-  delay(100);
-
-
-}
-/*
-void fight(){
-  digitalWrite(mlia,HIGH);
-  digitalWrite(mlib,HIGH);
+/* ----------- debugging ----------------
+  Serial.print(ultrasonic.Ranging(CM));
+  Serial.println("cm");
+  Serial.println("IR front :");
+  Serial.println(IR_front); 
+  Serial.println("IR back :");
+  Serial.println(IR_back);  
+*/ --------------------------------------  
 }
 
-void search(){
+void forword(int speed){
   
 }
-*/
+
+void backward(int speed){
+  
+}
+
+void rotate(int speed){
+  
+}
+
+void wait(int speed){
+  
+}
+
