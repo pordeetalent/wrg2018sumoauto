@@ -85,7 +85,17 @@ void loop(){
       WAIT(0);
   }
     
-  
+  if (distVL < 50) {
+    TURN_L(255);    
+  } else {
+      WAIT(0);
+  }
+
+  if (distVR < 50) {
+    TURN_R(255);    
+  } else {
+      WAIT(0);
+  }
 
   //ถ้า ultrasonic left เห็น ให้เลี้ยวซ้าย
   //ถ้า ultrasonic left ไม่เห็น ให้ไม่ต้องทำอะไร
