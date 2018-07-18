@@ -1,22 +1,33 @@
-const trigpinF 0 //trig ของ ultrasonic front
-const echopinF 1 //echo ของ ultrasonic front
-const trigpinL 2 //trig ของ ultrasonic left
-const echopinL 3 //echo ของ ultrasonic left
-const trigpinR 4 //trig ของ ultrasonic right
-const echopinR 5 //echo ของ ultrasonic right
+//Sirapol Nokyoongthong
+//pordeetalent@gmail.com
 
-int mla = 9; //มอเตอร์ left ขา inA //หมุนมอเตอร์ซ้ายไปด้านหน้า (ค่ามี 0 กับ 1)
-int mlb = 10; //มอเตอร์ left ขา inB //หมุนมอเตอร์ซ้ายไปด้านหลัง (ค่ามี 0 กับ 1)
-int mra = 12; //มอเตอร์ Right ขา inA //หมุนมอเตอร์ขวาไปด้านหน้า (ค่ามี 0 กับ 1)
+#include <HCSR04.h>
+#define trigpinF 3 //trig ของ ultrasonic front
+#define echopinF 2 //echo ของ ultrasonic front
+#define trigpinR 5 //trig ของ ultrasonic left
+#define echopinR 4 //echo ของ ultrasonic left
+#define trigpinL 7 //trig ของ ultrasonic right
+#define echopinL 6 //echo ของ ultrasonic right
+#define irL 8 //infrared left
+#define irR 9 //infrared left
+
+int mla = 18; //มอเตอร์ left ขา inA //หมุนมอเตอร์ซ้ายไปด้านหน้า (ค่ามี 0 กับ 1)
+int mlb = 17; //มอเตอร์ left ขา inB //หมุนมอเตอร์ซ้ายไปด้านหลัง (ค่ามี 0 กับ 1)
+int mra = 15; //มอเตอร์ Right ขา inA //หมุนมอเตอร์ขวาไปด้านหน้า (ค่ามี 0 กับ 1)
 int mrb = 14; //มอเตอร์ Right ขา inB //หมุนมอเตอร์ขวาไปด้านหลัง (ค่ามี 0 กับ 1)
-int mlpwm = 8; //มอเตอร์ Left ขา pwm //กำหนดความเร็วการหมุนของมอเตอร์ซ้าย (ค่ามี 0 ถึง 255)
-int mrpwm = 11; //มอเตอร์ Right ขา pwm //กำหนดความเร็วการหมุนของมอเตอร์ขวา (ค่ามี 0 ถึง 255)
+int mlpwm = 19; //มอเตอร์ Left ขา pwm //กำหนดความเร็วการหมุนของมอเตอร์ซ้าย (ค่ามี 0 ถึง 255)
+int mrpwm = 16; //มอเตอร์ Right ขา pwm //กำหนดความเร็วการหมุนของมอเตอร์ขวา (ค่ามี 0 ถึง 255)
 
-int distF ; //ระยะห่างของ ultrasonic front
-int distL ; //ระยะห่างของ ultrasonic left
-int distR ; //ระยะห่างของ ultrasonic right
+//int distF ; //ระยะห่างของ ultrasonic front
+//int distL ; //ระยะห่างของ ultrasonic left
+//int distR ; //ระยะห่างของ ultrasonic right
+
+UltraSonicDistanceSensor distF(3, 2); //ระยะห่างของ ultrasonic front
+UltraSonicDistanceSensor distL(5, 4); //ระยะห่างของ ultrasonic left
+UltraSonicDistanceSensor distR(7, 6); //ระยะห่างของ ultrasonic right
 
 void setup(){
+  Serial.begin(9600);
   pinMode(mla, OUTPUT);
   pinMode(mlb, OUTPUT);
   pinMode(mra, OUTPUT);
@@ -29,40 +40,117 @@ void setup(){
   pinMode(echopinL, INPUT);
   pinMode(trigpinR, OUTPUT);
   pinMode(echopinR, INPUT);
-  delay (5000); //รอ 5 วินาทีก่อนที่จะทำงาน ตามที่กติกากำหนด
+  pinMode(irL, INPUT);
+  pinMode(irR, INPUT);
+  //delay (5000); //รอ 5 วินาทีก่อนที่จะทำงาน ตามที่กติกากำหนด
 }
 
 void loop(){
+  //delay (500);
+  
+  double distVF;
+  double distVL;
+  double distVR;
+  distVF = distF.measureDistanceCm();
+  distVL = distL.measureDistanceCm();
+  distVR = distR.measureDistanceCm();
+
+  
+  //############################
+  //##### debug ultrasonic #####
+  //############################
+  Serial.print("F = ");
+  Serial.println(distVF);
+  Serial.print("L = ");
+  Serial.println(distVL);
+  Serial.print("R = ");
+  Serial.println(distVR);
+  Serial.println("############");
+  //##############################
   
 
-/* ----------- debugging ----------------
-  Serial.print(ultrasonic.Ranging(CM));
-  Serial.println("cm");
-  Serial.println("IR front :");
-  Serial.println(IR_front); 
-  Serial.println("IR back :");
-  Serial.println(IR_back);  
-*/ --------------------------------------  
+  
+
+
+  //##### ตรวจหาค่า infrared #####
+  //int irLV = analogRead(irL); //อ่านค่าจาก infrared left ไปเก็บในตัวแปร irLV
+  //int irRV = analogRead(irL); //อ่านค่าจาก infrared right ไปเก็บในตัวแปร irRV
+
+  //##### ทำงานตามค่า ultrasonic front #####
+  //ถ้า ultrasonic front เห็น ให้พุ่งตรง
+  //ถ้า ultrasonic front ไม่เห็น ให้หมุนตัว
+  if (distVF < 50) {
+    FORWARD(255);    
+  } else {
+      WAIT(0);
+  }
+    
+  
+
+  //ถ้า ultrasonic left เห็น ให้เลี้ยวซ้าย
+  //ถ้า ultrasonic left ไม่เห็น ให้ไม่ต้องทำอะไร
+
+  //ถ้า ultrasonic right เห็น ให้เลี้ยวขวา
+  //ถ้า ultrasonic right ไม่เห็น ให้ไม่ต้องทำอะไร
+
+  //ถ้า infrared left เห็น ให้เลี้ยวขวา
+  //ถ้า infrared left ไม่เห็น ให้ไม่ต้องทำอะไร
+
+  //ถ้า infrared right เห็น ให้เลี้ยวซ้าย
+  //ถ้า infrared right ไม่เห็น ให้ไม่ต้องทำอะไร
+
+// ----------- debugging ----------------
+//  Serial.print(ultrasonic.Ranging(CM));
+  //Serial.println("cm");
+  //Serial.println("IR front :");
+//  Serial.println(IR_front); 
+  //Serial.println("IR back :");
+//  Serial.println(IR_back);  
+// --------------------------------------  
 }
 
-void forword(int Speed){
+void FORWARD (int Speed){
   digitalWrite(mla, HIGH);
-  digitalWrite(mlb, HIGH);
-  digitalWrite(mra, LOW);
+  digitalWrite(mlb, LOW);
+  digitalWrite(mra, HIGH);
   digitalWrite(mrb, LOW);
   analogWrite(mlpwm, Speed);
   analogWrite(mrpwm, Speed);
 }
 
-void backward(int Speed){
-  
+void BACKWARD (int Speed){
+  digitalWrite(mla, LOW);
+  digitalWrite(mlb, HIGH);
+  digitalWrite(mra, LOW);
+  digitalWrite(mrb, HIGH);
+  analogWrite(mlpwm, Speed);
+  analogWrite(mrpwm, Speed);
 }
 
-void rotate(int Speed){
-  
+void TURN_L (int Speed){
+  digitalWrite(mla, LOW);
+  digitalWrite(mlb, HIGH);
+  digitalWrite(mra, HIGH);
+  digitalWrite(mrb, LOW);
+  analogWrite(mlpwm, Speed);
+  analogWrite(mrpwm, Speed);
 }
 
-void wait(int Speed){
-  
+void TURN_R (int Speed){
+  digitalWrite(mla, HIGH);
+  digitalWrite(mlb, LOW);
+  digitalWrite(mra, LOW);
+  digitalWrite(mrb, HIGH);
+  analogWrite(mlpwm, Speed);
+  analogWrite(mrpwm, Speed);
+}
+
+void WAIT (int Speed){
+  digitalWrite(mla, LOW);
+  digitalWrite(mlb, LOW);
+  digitalWrite(mra, LOW);
+  digitalWrite(mrb, LOW);
+  analogWrite(mlpwm, Speed);
+  analogWrite(mrpwm, Speed);
 }
 
