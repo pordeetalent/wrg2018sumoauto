@@ -8,8 +8,8 @@
 #define echopinL 5 //echo ของ ultrasonic left
 #define trigpinR 6 //trig ของ ultrasonic right
 #define echopinR 7 //echo ของ ultrasonic right
-#define irL 8 //infrared left
-#define irR 9 //infrared left
+#define irL 8 //infrared left (1=black, 0=white)
+#define irR 9 //infrared left (1=black, 0=white)
 
 int mla = 18; //มอเตอร์ left ขา inA //หมุนมอเตอร์ซ้ายไปด้านหน้า (ค่ามี 0 กับ 1)
 int mlb = 17; //มอเตอร์ left ขา inB //หมุนมอเตอร์ซ้ายไปด้านหลัง (ค่ามี 0 กับ 1)
@@ -17,10 +17,6 @@ int mra = 15; //มอเตอร์ Right ขา inA //หมุนมอเ�
 int mrb = 14; //มอเตอร์ Right ขา inB //หมุนมอเตอร์ขวาไปด้านหลัง (ค่ามี 0 กับ 1)
 int mlpwm = A1; //มอเตอร์ Left ขา pwm //กำหนดความเร็วการหมุนของมอเตอร์ซ้าย (ค่ามี 0 ถึง 255)
 int mrpwm = A2; //มอเตอร์ Right ขา pwm //กำหนดความเร็วการหมุนของมอเตอร์ขวา (ค่ามี 0 ถึง 255)
-
-//int distF ; //ระยะห่างของ ultrasonic front
-//int distL ; //ระยะห่างของ ultrasonic left
-//int distR ; //ระยะห่างของ ultrasonic right
 
 UltraSonicDistanceSensor distF(trigpinF, echopinF); //ระยะห่างของ ultrasonic front
 UltraSonicDistanceSensor distL(trigpinL, echopinL); //ระยะห่างของ ultrasonic left
@@ -55,6 +51,9 @@ void loop(){
   distVL = distL.measureDistanceCm();
   distVR = distR.measureDistanceCm();
 
+  int irLV = digitalRead(irL);
+  int irRV = digitalRead(irR);
+
   
   //############################
   //##### debug ultrasonic #####
@@ -65,6 +64,10 @@ void loop(){
   Serial.println(distVL);
   Serial.print("R = ");
   Serial.println(distVR);
+  Serial.print("irL = ");
+  Serial.println(irLV);
+  Serial.print("irR = ");
+  Serial.println(irRV);
   Serial.println("############");
   //##############################
   
