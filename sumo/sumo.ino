@@ -2,12 +2,12 @@
 //pordeetalent@gmail.com
 
 #include <HCSR04.h>
-#define trigpinF 3 //trig ของ ultrasonic front
-#define echopinF 2 //echo ของ ultrasonic front
-#define trigpinR 5 //trig ของ ultrasonic left
-#define echopinR 4 //echo ของ ultrasonic left
-#define trigpinL 7 //trig ของ ultrasonic right
-#define echopinL 6 //echo ของ ultrasonic right
+#define trigpinF 2 //trig ของ ultrasonic front
+#define echopinF 3 //echo ของ ultrasonic front
+#define trigpinR 6 //trig ของ ultrasonic left
+#define echopinR 7 //echo ของ ultrasonic left
+#define trigpinL 4 //trig ของ ultrasonic right
+#define echopinL 5 //echo ของ ultrasonic right
 #define irL 8 //infrared left
 #define irR 9 //infrared left
 
@@ -15,8 +15,8 @@ int mla = 18; //มอเตอร์ left ขา inA //หมุนมอเต
 int mlb = 17; //มอเตอร์ left ขา inB //หมุนมอเตอร์ซ้ายไปด้านหลัง (ค่ามี 0 กับ 1)
 int mra = 15; //มอเตอร์ Right ขา inA //หมุนมอเตอร์ขวาไปด้านหน้า (ค่ามี 0 กับ 1)
 int mrb = 14; //มอเตอร์ Right ขา inB //หมุนมอเตอร์ขวาไปด้านหลัง (ค่ามี 0 กับ 1)
-int mlpwm = 19; //มอเตอร์ Left ขา pwm //กำหนดความเร็วการหมุนของมอเตอร์ซ้าย (ค่ามี 0 ถึง 255)
-int mrpwm = 16; //มอเตอร์ Right ขา pwm //กำหนดความเร็วการหมุนของมอเตอร์ขวา (ค่ามี 0 ถึง 255)
+int mlpwm = A1; //มอเตอร์ Left ขา pwm //กำหนดความเร็วการหมุนของมอเตอร์ซ้าย (ค่ามี 0 ถึง 255)
+int mrpwm = A2; //มอเตอร์ Right ขา pwm //กำหนดความเร็วการหมุนของมอเตอร์ขวา (ค่ามี 0 ถึง 255)
 
 //int distF ; //ระยะห่างของ ultrasonic front
 //int distL ; //ระยะห่างของ ultrasonic left
@@ -80,19 +80,11 @@ void loop(){
   //ถ้า ultrasonic front เห็น ให้พุ่งตรง
   //ถ้า ultrasonic front ไม่เห็น ให้หมุนตัว
   if (distVF < 50) {
-    FORWARD(255);    
-  } else {
-      WAIT(0);
-  }
-    
-  if (distVL < 50) {
-    TURN_L(255);    
-  } else {
-      WAIT(0);
-  }
-
-  if (distVR < 50) {
-    TURN_R(255);    
+    FORWARD(120);    
+  } else if (distVL < 50) {
+    TURN_L(120);    
+  } else if (distVR < 50) {
+    TURN_R(120);    
   } else {
       WAIT(0);
   }
