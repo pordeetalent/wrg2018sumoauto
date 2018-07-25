@@ -77,17 +77,17 @@ void loop(){
   
 
   if (irLV==0 || irRV==0){
-    BACKWARD(255);
+    BACKWARD(50);
     BACKFLIP();
   } else if (distVL < 15) {
-    TURN_L(255);
+    TURN_L(50);
   } else if (distVR < 15) {
-    TURN_R(255);
+    TURN_R(50);
   } else {
-    FORWARD(255);
+    FORWARD(50);
   }
 
-
+}
 
 void FORWARD (int Speed){
   digitalWrite(mla, HIGH);
