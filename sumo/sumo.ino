@@ -10,13 +10,14 @@
 #define echopinR 7 //echo ของ ultrasonic right
 #define irL 8 //infrared left (1=black, 0=white)
 #define irR 9 //infrared left (1=black, 0=white)
+#define led 13 //infrared left (1=black, 0=white)
 
-int mla = 18; //มอเตอร์ left ขา inA //หมุนมอเตอร์ซ้ายไปด้านหน้า (ค่ามี 0 กับ 1)
-int mlb = 17; //มอเตอร์ left ขา inB //หมุนมอเตอร์ซ้ายไปด้านหลัง (ค่ามี 0 กับ 1)
-int mra = 15; //มอเตอร์ Right ขา inA //หมุนมอเตอร์ขวาไปด้านหน้า (ค่ามี 0 กับ 1)
-int mrb = 14; //มอเตอร์ Right ขา inB //หมุนมอเตอร์ขวาไปด้านหลัง (ค่ามี 0 กับ 1)
-int mlpwm = A1; //มอเตอร์ Left ขา pwm //กำหนดความเร็วการหมุนของมอเตอร์ซ้าย (ค่ามี 0 ถึง 255)
-int mrpwm = A2; //มอเตอร์ Right ขา pwm //กำหนดความเร็วการหมุนของมอเตอร์ขวา (ค่ามี 0 ถึง 255)
+int mla = 15; //มอเตอร์ left ขา inA //หมุนมอเตอร์ซ้ายไปด้านหน้า (ค่ามี 0 กับ 1)
+int mlb = 14; //มอเตอร์ left ขา inB //หมุนมอเตอร์ซ้ายไปด้านหลัง (ค่ามี 0 กับ 1)
+int mra = 18; //มอเตอร์ Right ขา inA //หมุนมอเตอร์ขวาไปด้านหน้า (ค่ามี 0 กับ 1)
+int mrb = 17; //มอเตอร์ Right ขา inB //หมุนมอเตอร์ขวาไปด้านหลัง (ค่ามี 0 กับ 1)
+int mlpwm = 11; //มอเตอร์ Left ขา pwm //กำหนดความเร็วการหมุนของมอเตอร์ซ้าย (ค่ามี 0 ถึง 255)
+int mrpwm = 10; //มอเตอร์ Right ขา pwm //กำหนดความเร็วการหมุนของมอเตอร์ขวา (ค่ามี 0 ถึง 255)
 
 UltraSonicDistanceSensor distF(trigpinF, echopinF); //ระยะห่างของ ultrasonic front
 UltraSonicDistanceSensor distL(trigpinL, echopinL); //ระยะห่างของ ultrasonic left
@@ -24,6 +25,7 @@ UltraSonicDistanceSensor distR(trigpinR, echopinR); //ระยะห่าง�
 
 void setup(){
   Serial.begin(9600);
+  pinMode(led, OUTPUT);
   pinMode(mla, OUTPUT);
   pinMode(mlb, OUTPUT);
   pinMode(mra, OUTPUT);
@@ -50,9 +52,11 @@ void loop(){
   distVF = distF.measureDistanceCm();
   distVL = distL.measureDistanceCm();
   distVR = distR.measureDistanceCm();
-
-  int irLV = digitalRead(irL);
-  int irRV = digitalRead(irR);
+  
+  //##### ตรวจหาค่า infrared #####
+  int irLV = digitalRead(irL); //อ่านค่าจาก infrared left ไปเก็บในตัวแปร irLV
+  int irRV = digitalRead(irR); //อ่านค่าจาก infrared right ไปเก็บในตัวแปร irRV
+  //#############################
 
   
   //############################
@@ -72,47 +76,18 @@ void loop(){
   //##############################
   
 
-  
-
-
-  //##### ตรวจหาค่า infrared #####
-  //int irLV = analogRead(irL); //อ่านค่าจาก infrared left ไปเก็บในตัวแปร irLV
-  //int irRV = analogRead(irL); //อ่านค่าจาก infrared right ไปเก็บในตัวแปร irRV
-
-  //##### ทำงานตามค่า ultrasonic front #####
-  //ถ้า ultrasonic front เห็น ให้พุ่งตรง
-  //ถ้า ultrasonic front ไม่เห็น ให้หมุนตัว
-  if (distVF < 50) {
-    FORWARD(120);    
-  } else if (distVL < 50) {
-    TURN_L(120);    
-  } else if (distVR < 50) {
-    TURN_R(120);    
+  if (irLV==0 || irRV==0){
+    BACKWARD(255);
+    BACKFLIP();
+  } else if (distVL < 15) {
+    TURN_L(255);
+  } else if (distVR < 15) {
+    TURN_R(255);
   } else {
-      WAIT(0);
+    FORWARD(255);
   }
 
-  //ถ้า ultrasonic left เห็น ให้เลี้ยวซ้าย
-  //ถ้า ultrasonic left ไม่เห็น ให้ไม่ต้องทำอะไร
 
-  //ถ้า ultrasonic right เห็น ให้เลี้ยวขวา
-  //ถ้า ultrasonic right ไม่เห็น ให้ไม่ต้องทำอะไร
-
-  //ถ้า infrared left เห็น ให้เลี้ยวขวา
-  //ถ้า infrared left ไม่เห็น ให้ไม่ต้องทำอะไร
-
-  //ถ้า infrared right เห็น ให้เลี้ยวซ้าย
-  //ถ้า infrared right ไม่เห็น ให้ไม่ต้องทำอะไร
-
-// ----------- debugging ----------------
-//  Serial.print(ultrasonic.Ranging(CM));
-  //Serial.println("cm");
-  //Serial.println("IR front :");
-//  Serial.println(IR_front); 
-  //Serial.println("IR back :");
-//  Serial.println(IR_back);  
-// --------------------------------------  
-}
 
 void FORWARD (int Speed){
   digitalWrite(mla, HIGH);
@@ -121,6 +96,7 @@ void FORWARD (int Speed){
   digitalWrite(mrb, LOW);
   analogWrite(mlpwm, Speed);
   analogWrite(mrpwm, Speed);
+  delay(500);
 }
 
 void BACKWARD (int Speed){
@@ -130,6 +106,7 @@ void BACKWARD (int Speed){
   digitalWrite(mrb, HIGH);
   analogWrite(mlpwm, Speed);
   analogWrite(mrpwm, Speed);
+  delay(500);
 }
 
 void TURN_L (int Speed){
@@ -139,6 +116,7 @@ void TURN_L (int Speed){
   digitalWrite(mrb, LOW);
   analogWrite(mlpwm, Speed);
   analogWrite(mrpwm, Speed);
+  delay(500);
 }
 
 void TURN_R (int Speed){
@@ -148,6 +126,7 @@ void TURN_R (int Speed){
   digitalWrite(mrb, HIGH);
   analogWrite(mlpwm, Speed);
   analogWrite(mrpwm, Speed);
+  delay(500);
 }
 
 void WAIT (int Speed){
@@ -157,5 +136,24 @@ void WAIT (int Speed){
   digitalWrite(mrb, LOW);
   analogWrite(mlpwm, Speed);
   analogWrite(mrpwm, Speed);
+}
+
+void BACKFLIP (){
+  digitalWrite(mla, HIGH);
+  digitalWrite(mlb, LOW);
+  digitalWrite(mra, LOW);
+  digitalWrite(mrb, HIGH);
+  analogWrite(mlpwm, 255);
+  analogWrite(mrpwm, 255);
+  delay(1000);
+}
+
+void BLINK (){
+  digitalWrite(led, HIGH);
+  delay(50);
+  digitalWrite(led, LOW);
+  delay(50);
+  digitalWrite(led, HIGH);
+  delay(50);
 }
 
