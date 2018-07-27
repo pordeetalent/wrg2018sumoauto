@@ -1,110 +1,151 @@
-//Author Sirapol Nokyoongthong
-//email pordeetalent@gmail.com
-//2018-07-13
+//Sirapol Nokyoongthong
+//pordeetalent@gmail.com
 
-#define utf 0 //Ultrasonic trig front
-#define uef 1 //Ultrasonic echo front
-#define utl 2 //Ultrasonic trig left
-#define uel 3 //Ultrasonic echo leftt
-#define utr 4 //Ultrasonic trig right
-#define uer 5 //Ultrasonic echo right
-#define mlia 9 //Motor left in A
-#define mlib 10 //Motor left in B
-#define mlpw 8 //Motor left PWM
-#define mria 12 //Motor right in A
-#define mrib 14 //Motor right in B
-#define mrpw 11 //Motor right PWM
-#define led 13
+/* Identify pin
+trigpinF 2 //trig ของ ultrasonic front
+echopinF 3 //echo ของ ultrasonic front
+trigpinL 6 //trig ของ ultrasonic left
+echopinL 7 //echo ของ ultrasonic left
+trigpinR 4 //trig ของ ultrasonic right
+echopinR 5 //echo ของ ultrasonic right
+irL 8 //infrared left (1=black, 0=white)
+irR 9 //infrared left (1=black, 0=white)
+led 13 //infrared left (1=black, 0=white)
 
 
-void setup() {
-  Serial.begin (9600);
-  pinMode(utf, OUTPUT);
-  pinMode(uef, INPUT);
-  pinMode(utl, OUTPUT);
-  pinMode(uel, INPUT);
-  pinMode(utr, OUTPUT);
-  pinMode(uer, INPUT);
-  pinMode(led, OUTPUT);
-  pinMode(mlia, OUTPUT);
-  pinMode(mlib, OUTPUT);
-  pinMode(mlpw, OUTPUT);
-  pinMode(mria, OUTPUT);
-  pinMode(mrib, OUTPUT);
-  pinMode(mrpw, OUTPUT);
-}
-
-void loop() {
-  long duration, distance;
-  long range_f;
-  long range_l;
-  long range_r;
-
-  //Front USonic
-  digitalWrite(utf, LOW);  // Added this line
-  delayMicroseconds(2); // Added this line
-  digitalWrite(utf, HIGH);
-  delayMicroseconds(2); // Added this line
-  range_f = pulseIn(uef, HIGH);
-
-  //Left USonic
-  digitalWrite(utl, LOW);  // Added this line
-  delayMicroseconds(2); // Added this line
-  digitalWrite(utl, HIGH);
-  delayMicroseconds(2); // Added this line
-  range_l = pulseIn(uel, HIGH);
-
-  //Right USonic
-  digitalWrite(utr, LOW);  // Added this line
-  delayMicroseconds(2); // Added this line
-  digitalWrite(utr, HIGH);
-  delayMicroseconds(2); // Added this line
-  range_r = pulseIn(uer, HIGH);
-
-  //Print
-  Serial.print("rangeF = ");
-  Serial.println(range_f);
-  Serial.print("rangeL = ");
-  Serial.println(range_l);
-  Serial.print("rangeR = ");
-  Serial.println(range_r);
-  Serial.println();
-  Serial.println();
-  
-
-
-  if (range_f < 300){
-    digitalWrite(mlia,HIGH);
-    digitalWrite(mlib,HIGH);
-  } else {
-      
-  }
-
-  if (range_l < 1000){
-    digitalWrite(mlia,LOW);
-    digitalWrite(mlib,HIGH);
-  } else {
-      
-  }
-
-  if (range_r < 1000){
-    digitalWrite(mlia,HIGH);
-    digitalWrite(mlib,LOW);
-  } else {
-      
-  }
-
-  delay(100);
-
-
-}
-/*
-void fight(){
-  digitalWrite(mlia,HIGH);
-  digitalWrite(mlib,HIGH);
-}
-
-void search(){
-  
-}
+mla = 15; //มอเตอร์ left ขา inA //หมุนมอเตอร์ซ้ายไปด้านหน้า (ค่ามี 0 กับ 1)
+mlb = 14; //มอเตอร์ left ขา inB //หมุนมอเตอร์ซ้ายไปด้านหลัง (ค่ามี 0 กับ 1)
+mra = 18; //มอเตอร์ Right ขา inA //หมุนมอเตอร์ขวาไปด้านหน้า (ค่ามี 0 กับ 1)
+mrb = 17; //มอเตอร์ Right ขา inB //หมุนมอเตอร์ขวาไปด้านหลัง (ค่ามี 0 กับ 1)
+mlpwm = 11; //มอเตอร์ Left ขา pwm //กำหนดความเร็วการหมุนของมอเตอร์ซ้าย (ค่ามี 0 ถึง 255)
+mrpwm = 10; //มอเตอร์ Right ขา pwm //กำหนดความเร็วการหมุนของมอเตอร์ขวา (ค่ามี 0 ถึง 255)
 */
+
+ 
+void setup(){
+  Serial.begin(9600);
+  pinMode(led, OUTPUT);
+  pinMode(mla, OUTPUT);
+  pinMode(mlb, OUTPUT);
+  pinMode(mra, OUTPUT);
+  pinMode(mrb, OUTPUT);
+  pinMode(mlpwm, OUTPUT);
+  pinMode(mrpwm, OUTPUT);
+  pinMode(trigpinF, OUTPUT);
+  pinMode(echopinF, INPUT);
+  pinMode(trigpinL, OUTPUT);
+  pinMode(echopinL, INPUT);
+  pinMode(trigpinR, OUTPUT);
+  pinMode(echopinR, INPUT);
+  pinMode(irL, INPUT);
+  pinMode(irR, INPUT);
+}
+
+void loop(){
+  
+  //##### ตรวจหาค่า infrared #####
+  int irLV = digitalRead(irL); //อ่านค่าจาก infrared left ไปเก็บในตัวแปร irLV
+  int irRV = digitalRead(irR); //อ่านค่าจาก infrared right ไปเก็บในตัวแปร irRV
+  //#############################
+
+  
+  //############################
+  //##### debug ultrasonic #####
+  //############################
+  Serial.print("F = ");
+  Serial.println(distVF);
+  Serial.print("L = ");
+  Serial.println(distVL);
+  Serial.print("R = ");
+  Serial.println(distVR);
+  Serial.print("irL = ");
+  Serial.println(irLV);
+  Serial.print("irR = ");
+  Serial.println(irRV);
+  Serial.println("############");
+  //##############################
+  
+
+  /*
+  if (irLV==0 || irRV==0){
+    BACKWARD(80);
+    BACKFLIP();
+  } else if (distVL < 15) {
+    TURN_L(80);
+  } else if (distVR < 15) {
+    TURN_R(80);
+  } else {
+    FORWARD(80);
+  }
+  */
+
+}
+
+void FORWARD (int Speed){
+  digitalWrite(mla, HIGH);
+  digitalWrite(mlb, LOW);
+  digitalWrite(mra, HIGH);
+  digitalWrite(mrb, LOW);
+  analogWrite(mlpwm, Speed);
+  analogWrite(mrpwm, Speed);
+  delay(500);
+}
+
+void BACKWARD (int Speed){
+  digitalWrite(mla, LOW);
+  digitalWrite(mlb, HIGH);
+  digitalWrite(mra, LOW);
+  digitalWrite(mrb, HIGH);
+  analogWrite(mlpwm, Speed);
+  analogWrite(mrpwm, Speed);
+  delay(500);
+}
+
+void TURN_L (int Speed){
+  digitalWrite(mla, LOW);
+  digitalWrite(mlb, HIGH);
+  digitalWrite(mra, HIGH);
+  digitalWrite(mrb, LOW);
+  analogWrite(mlpwm, Speed);
+  analogWrite(mrpwm, Speed);
+  delay(500);
+}
+
+void TURN_R (int Speed){
+  digitalWrite(mla, HIGH);
+  digitalWrite(mlb, LOW);
+  digitalWrite(mra, LOW);
+  digitalWrite(mrb, HIGH);
+  analogWrite(mlpwm, Speed);
+  analogWrite(mrpwm, Speed);
+  delay(500);
+}
+
+void WAIT (int Speed){
+  digitalWrite(mla, LOW);
+  digitalWrite(mlb, LOW);
+  digitalWrite(mra, LOW);
+  digitalWrite(mrb, LOW);
+  analogWrite(mlpwm, Speed);
+  analogWrite(mrpwm, Speed);
+}
+
+void BACKFLIP (){
+  digitalWrite(mla, HIGH);
+  digitalWrite(mlb, LOW);
+  digitalWrite(mra, LOW);
+  digitalWrite(mrb, HIGH);
+  analogWrite(mlpwm, 80);
+  analogWrite(mrpwm, 80);
+  delay(1000);
+}
+
+void BLINK (){
+  digitalWrite(led, HIGH);
+  delay(50);
+  digitalWrite(led, LOW);
+  delay(50);
+  digitalWrite(led, HIGH);
+  delay(50);
+}
+
