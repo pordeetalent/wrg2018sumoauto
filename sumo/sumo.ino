@@ -82,22 +82,36 @@ void loop(){
   digitalWrite(ledL, LOW);
   digitalWrite(ledR, LOW);
   if (irLV==0 || irRV==0){
-    BACKWARD(80);
+    BACKWARD(50);
     BACKFLIP();
     digitalWrite(ledL, HIGH);
     digitalWrite(ledR, HIGH);
-  } else if (usVL >= 1 && usVL <= 10) {
-    TURN_L(80);
+  } else if (usVL >= 1 && usVL <= 5) {
+    TURN_L(250);
     digitalWrite(ledL, HIGH);
     digitalWrite(ledR, LOW);
-  } else if (usVR >= 1 && usVR <= 10) {
-    TURN_R(80);
+  } else if (usVL >= 6 && usVL <= 10) {
+    TURN_L(150);
+    digitalWrite(ledL, HIGH);
+    digitalWrite(ledR, LOW);
+  } else if (usVR >= 1 && usVR <= 5) {
+    TURN_R(250);
     digitalWrite(ledL, LOW);
     digitalWrite(ledR, HIGH);
-  } else {
+  } else if (usVR >= 6 && usVR <= 10) {
+    TURN_R(150);
+    digitalWrite(ledL, LOW);
+    digitalWrite(ledR, HIGH);
+  } else if (usVF >= 1 && usVF <= 5) {
     digitalWrite(ledL, LOW);
     digitalWrite(ledR, LOW);
-    FORWARD(80);
+    FORWARD(255);
+  } else if (usVF >= 6 && usVF <= 10) {
+    digitalWrite(ledL, LOW);
+    digitalWrite(ledR, LOW);
+    FORWARD(150);
+  } else {
+    FORWARD(70);
   }
   
 
