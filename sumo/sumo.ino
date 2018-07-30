@@ -65,15 +65,15 @@ void loop(){
   //############################
   //##### debug ultrasonic #####
   //############################
-  Serial.print("F = ");
-  Serial.println(usVF);
-  Serial.print("L = ");
-  Serial.println(usVL);
-  Serial.print("R = ");
-  Serial.println(usVR);
-  Serial.print("irL = ");
-  Serial.println(irLV);
-  Serial.print("irR = ");
+  //Serial.print("F = ");
+  //Serial.println(usVF);
+  //Serial.print("L = ");
+  //Serial.println(usVL);
+  //Serial.print("R = ");
+  //Serial.println(usVR);
+  //Serial.print("irL = ");
+  Serial.print(irLV);
+  //Serial.print("irR = ");
   Serial.println(irRV);
   Serial.println("############");  
   //##############################
@@ -82,31 +82,31 @@ void loop(){
   digitalWrite(ledL, LOW);
   digitalWrite(ledR, LOW);
   if (irLV==0 || irRV==0){
-    BACKWARD(50);
-    BACKFLIP();
     digitalWrite(ledL, HIGH);
     digitalWrite(ledR, HIGH);
-  } else if (usVL >= 1 && usVL <= 5) {
+    BACKWARD(50);
+    BACKFLIP();
+  } else if (usVL >= 1 && usVL <= 15) {
     TURN_L(250);
     digitalWrite(ledL, HIGH);
     digitalWrite(ledR, LOW);
-  } else if (usVL >= 6 && usVL <= 10) {
+  } else if (usVL >= 16 && usVL <= 30) {
     TURN_L(150);
     digitalWrite(ledL, HIGH);
     digitalWrite(ledR, LOW);
-  } else if (usVR >= 1 && usVR <= 5) {
+  } else if (usVR >= 1 && usVR <= 15) {
     TURN_R(250);
     digitalWrite(ledL, LOW);
     digitalWrite(ledR, HIGH);
-  } else if (usVR >= 6 && usVR <= 10) {
+  } else if (usVR >= 16 && usVR <= 30) {
     TURN_R(150);
     digitalWrite(ledL, LOW);
     digitalWrite(ledR, HIGH);
-  } else if (usVF >= 1 && usVF <= 5) {
+  } else if (usVF >= 1 && usVF <= 30) {
     digitalWrite(ledL, LOW);
     digitalWrite(ledR, LOW);
     FORWARD(255);
-  } else if (usVF >= 6 && usVF <= 10) {
+  } else if (usVF >= 31 && usVF <= 70) {
     digitalWrite(ledL, LOW);
     digitalWrite(ledR, LOW);
     FORWARD(150);
@@ -134,7 +134,7 @@ void BACKWARD (int Speed){
   digitalWrite(mrb, HIGH);
   analogWrite(mlpwm, Speed);
   analogWrite(mrpwm, Speed);
-  //delay(50);
+  delay(1000);
 }
 
 void TURN_L (int Speed){
@@ -173,7 +173,7 @@ void BACKFLIP (){
   digitalWrite(mrb, HIGH);
   analogWrite(mlpwm, 80);
   analogWrite(mrpwm, 80);
-  //delay(1000);
+  delay(1000);
 }
 
 /*
