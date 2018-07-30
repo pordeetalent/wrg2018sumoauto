@@ -8,8 +8,8 @@ const int trigpinL = 6; //trig ของ ultrasonic left
 const int echopinL = 7; //echo ของ ultrasonic left
 const int trigpinR = 4; //trig ของ ultrasonic right
 const int echopinR = 5; //echo ของ ultrasonic right
-const int irL = 8; //infrared left (1=black, 0=white)
-const int irR = 9; //infrared left (1=black, 0=white)
+const int irL = A2; //infrared left (1=black, 0=white)
+const int irR = A5; //infrared left (1=black, 0=white)
 const int ledL = 12; //LED left
 const int ledR = 13; //LED right
 const int maxDist = 200;
@@ -57,8 +57,8 @@ void loop(){
   int usVR = usR.ping_cm();
 
   //##### ตรวจหาค่า infrared #####
-  int irLV = digitalRead(irL); //อ่านค่าจาก infrared left ไปเก็บในตัวแปร irLV
-  int irRV = digitalRead(irR); //อ่านค่าจาก infrared right ไปเก็บในตัวแปร irRV
+  int irLV = analogRead(irL); //อ่านค่าจาก infrared left ไปเก็บในตัวแปร irLV
+  int irRV = analogRead(irR); //อ่านค่าจาก infrared right ไปเก็บในตัวแปร irRV
   //#############################
 
   
@@ -71,9 +71,9 @@ void loop(){
   //Serial.println(usVL);
   //Serial.print("R = ");
   //Serial.println(usVR);
-  //Serial.print("irL = ");
-  Serial.print(irLV);
-  //Serial.print("irR = ");
+  Serial.print("irL = ");
+  Serial.println(irLV);
+  Serial.print("irR = ");
   Serial.println(irRV);
   Serial.println("############");  
   //##############################
@@ -81,7 +81,7 @@ void loop(){
 
   digitalWrite(ledL, LOW);
   digitalWrite(ledR, LOW);
-  if (irLV==0 || irRV==0){
+  if (irLV < 800 || irRV < 800){
     digitalWrite(ledL, HIGH);
     digitalWrite(ledR, HIGH);
     BACKWARD(50);
